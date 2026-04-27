@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://nrxsadrw2kgq"]
+
+[ext_resource type="Shader" uid="uid://bq2bvwf6fhmav" path="res://graphics_editor/glowblur.gdshader" id="1_4lftd"]
+
+[resource]
+shader = ExtResource("1_4lftd")
+shader_parameter/strength = 5.9490002793176195
+shader_parameter/mix_percentage = 0.0

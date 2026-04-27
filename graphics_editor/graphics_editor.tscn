@@ -1,0 +1,149 @@
+[gd_scene format=3 uid="uid://dxli55hrong38"]
+
+[ext_resource type="Script" uid="uid://c3vnkkuoup6u" path="res://graphics_editor/GraphicsEditor.cs" id="1_mhpcb"]
+[ext_resource type="Texture2D" uid="uid://cixcyj01jn5nb" path="res://graphics_editor/reference.png" id="1_ngru6"]
+[ext_resource type="Shader" uid="uid://dlx47taiax6ex" path="res://graphics_editor/stroke_render_hack.gdshader" id="1_pmlmg"]
+[ext_resource type="Texture2D" uid="uid://dydfe3k4sifr6" path="res://graphics_editor/calcinator_base.png" id="2_cw0f1"]
+[ext_resource type="Texture2D" uid="uid://xhiepnp6gnap" path="res://graphics_editor/input_base.png" id="3_f07t4"]
+[ext_resource type="Texture2D" uid="uid://c1rm1mtxapani" path="res://graphics_editor/base_variations/base_tr.png" id="3_xh4i7"]
+[ext_resource type="Texture2D" uid="uid://50bmbk2jxxc6" path="res://graphics_editor/base_variations/base_empty_fuzz.png" id="4_4y8e6"]
+[ext_resource type="Texture2D" uid="uid://bm7iryjh8whe" path="res://graphics_editor/base_variations/base_tl.png" id="4_8vr42"]
+[ext_resource type="Texture2D" uid="uid://dwc8430l03r7s" path="res://graphics_editor/calcinator_test.png" id="4_fftp1"]
+[ext_resource type="Texture2D" uid="uid://i720gyrxy5qb" path="res://graphics_editor/base_base.png" id="5_iovjk"]
+[ext_resource type="Texture2D" uid="uid://brto4s7vn41w2" path="res://graphics_editor/base_variations/base_r.png" id="5_li85v"]
+[ext_resource type="Texture2D" uid="uid://rvhepcspw8ka" path="res://graphics_editor/base_variations/base_l.png" id="6_jmhkn"]
+[ext_resource type="Texture2D" uid="uid://db4jvhbc4rnev" path="res://graphics_editor/base_variations/base_br.png" id="7_anbos"]
+[ext_resource type="Texture2D" uid="uid://cqwtw8uufi8vo" path="res://graphics_editor/base_variations/base_bl.png" id="8_di6dd"]
+[ext_resource type="Texture2D" uid="uid://b7fo8hqe7e6ow" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/1.png" id="10_ajuis"]
+[ext_resource type="Material" uid="uid://bdyrpxaoo636i" path="res://graphics_editor/glowblur_no_screen.tres" id="10_anbos"]
+[ext_resource type="Material" uid="uid://ba2w8x0qllshw" path="res://graphics_editor/only_green.tres" id="10_jmhkn"]
+[ext_resource type="Texture2D" uid="uid://daiuo8cn2fn44" path="res://graphics_editor/single_glow.png" id="10_li85v"]
+[ext_resource type="Texture2D" uid="uid://6jcniwd7vk3l" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/2.png" id="11_pmlmg"]
+[ext_resource type="Texture2D" uid="uid://bm5ath4ec0ate" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/3.png" id="12_8bhvk"]
+[ext_resource type="Texture2D" uid="uid://der253vk00aox" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/4.png" id="13_4062y"]
+[ext_resource type="Texture2D" uid="uid://bq10opqjehpfo" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/5.png" id="14_c3wax"]
+[ext_resource type="Texture2D" uid="uid://cpvmnquj1h47k" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/6.png" id="15_sge4r"]
+[ext_resource type="Texture2D" uid="uid://d3yfbmsd1cmwn" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/7.png" id="16_87spf"]
+[ext_resource type="Texture2D" uid="uid://bmx7m7irxapo6" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/8.png" id="17_b2y0r"]
+[ext_resource type="Texture2D" uid="uid://brup6c1xmtur0" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/9.png" id="18_m54ow"]
+[ext_resource type="Texture2D" uid="uid://copa3rh7y2cky" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/10.png" id="19_jxfpe"]
+[ext_resource type="Texture2D" uid="uid://cuo2lga0r4dg6" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/11.png" id="20_88ejq"]
+[ext_resource type="Texture2D" uid="uid://cgbect6l2kfv8" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/12.png" id="21_a6rac"]
+[ext_resource type="Texture2D" uid="uid://60xoqem2ypen" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/13.png" id="22_4yrhy"]
+[ext_resource type="Texture2D" uid="uid://chhlm0bujq1r2" path="res://graphics_editor/devmodeus_stroke_pieces_no_alpha/14.png" id="23_rl50h"]
+[ext_resource type="Texture2D" uid="uid://c2dux6gp6wu8l" path="res://graphics_editor/origmarker.png" id="31_ajuis"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eehyy"]
+texture = ExtResource("4_4y8e6")
+texture_region_size = Vector2i(82, 96)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f07t4"]
+texture = ExtResource("2_cw0f1")
+texture_region_size = Vector2i(82, 96)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fftp1"]
+texture = ExtResource("3_f07t4")
+texture_region_size = Vector2i(82, 94)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iovjk"]
+texture = ExtResource("4_fftp1")
+texture_region_size = Vector2i(82, 96)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mhpcb"]
+texture = ExtResource("5_iovjk")
+texture_region_size = Vector2i(82, 96)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_fftp1"]
+tile_shape = 3
+tile_size = Vector2i(82, 96)
+sources/1 = SubResource("TileSetAtlasSource_f07t4")
+sources/2 = SubResource("TileSetAtlasSource_fftp1")
+sources/3 = SubResource("TileSetAtlasSource_iovjk")
+sources/4 = SubResource("TileSetAtlasSource_mhpcb")
+sources/0 = SubResource("TileSetAtlasSource_eehyy")
+
+[node name="GraphicsEditor" type="Node2D" unique_id=1328685445 node_paths=PackedStringArray("hexGridMath", "glowRenderNode", "origMarker")]
+script = ExtResource("1_mhpcb")
+hexGridMath = NodePath("HexGridMath")
+hoverGlowIcon = ExtResource("4_fftp1")
+onlyGreenShader = ExtResource("10_jmhkn")
+glowRenderNode = NodePath("GlowRender")
+origMarker = NodePath("OrigMarker")
+strokeRenderHackShader = ExtResource("1_pmlmg")
+base_tr = ExtResource("3_xh4i7")
+base_tl = ExtResource("4_8vr42")
+base_r = ExtResource("5_li85v")
+base_l = ExtResource("6_jmhkn")
+base_br = ExtResource("7_anbos")
+base_bl = ExtResource("8_di6dd")
+stroke_textures = Array[Texture2D]([null, ExtResource("10_ajuis"), ExtResource("11_pmlmg"), ExtResource("12_8bhvk"), ExtResource("13_4062y"), ExtResource("14_c3wax"), ExtResource("15_sge4r"), ExtResource("16_87spf"), ExtResource("17_b2y0r"), ExtResource("18_m54ow"), ExtResource("19_jxfpe"), ExtResource("20_88ejq"), ExtResource("21_a6rac"), ExtResource("22_4yrhy"), ExtResource("23_rl50h")])
+
+[node name="GlowRender" type="ColorRect" parent="." unique_id=1186563937]
+visible = false
+material = ExtResource("10_anbos")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31731.5
+offset_top = -221836.0
+offset_right = 31731.5
+offset_bottom = 221836.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_behavior_recursive = 1
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="GlowReference" type="Sprite2D" parent="." unique_id=2016741741]
+visible = false
+position = Vector2(156, 0)
+texture = ExtResource("10_li85v")
+metadata/_edit_lock_ = true
+
+[node name="Reference" type="Sprite2D" parent="." unique_id=329964897]
+visible = false
+show_behind_parent = true
+texture = ExtResource("1_ngru6")
+metadata/_edit_lock_ = true
+
+[node name="Reference2" type="Sprite2D" parent="." unique_id=1632050977]
+visible = false
+show_behind_parent = true
+position = Vector2(1066, 0)
+texture = ExtResource("1_ngru6")
+metadata/_edit_lock_ = true
+
+[node name="Reference3" type="Sprite2D" parent="." unique_id=1538077550]
+visible = false
+show_behind_parent = true
+position = Vector2(41, 497)
+texture = ExtResource("1_ngru6")
+metadata/_edit_lock_ = true
+
+[node name="Reference4" type="Sprite2D" parent="." unique_id=479105455]
+visible = false
+show_behind_parent = true
+position = Vector2(82, 994)
+texture = ExtResource("1_ngru6")
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1684174627]
+metadata/_edit_lock_ = true
+
+[node name="HexGridMath" type="TileMapLayer" parent="." unique_id=1326000214]
+position = Vector2(-30, 7)
+scale = Vector2(1, 0.985)
+tile_set = SubResource("TileSet_fftp1")
+metadata/_edit_lock_ = true
+
+[node name="OrigMarker" type="Sprite2D" parent="." unique_id=1183859469]
+texture_filter = 1
+texture_repeat = 1
+texture = ExtResource("31_ajuis")

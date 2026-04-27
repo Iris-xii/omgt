@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://da36kahaqy62i"]
+
+[ext_resource type="Script" uid="uid://dfisutnhemind" path="res://Main.cs" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://dxli55hrong38" path="res://graphics_editor/graphics_editor.tscn" id="1_ig7tw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0xm2m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ig7tw"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.6313726, 0.101960786, 0.4392157, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2yge"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.2945963, 0.022665204, 0.19615486, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.73635507, 0.7363552, 0.73635507, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0xm2m"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.8097461, 0.18844417, 0.573952, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[node name="Main" type="Control" unique_id=1106484856 node_paths=PackedStringArray("graphicsEditor", "doAutoshift", "disableOnExport")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_0xm2m")
+graphicsEditor = NodePath("GraphicsEditor")
+doAutoshift = NodePath("CanvasLayer/Control/Autoshift")
+disableOnExport = [NodePath("CanvasLayer")]
+
+[node name="GraphicsEditor" parent="." unique_id=1328685445 instance=ExtResource("1_ig7tw")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1186583599]
+layer = 5
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=771186452]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Autoshift" type="CheckBox" parent="CanvasLayer/Control" unique_id=180999610]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -29.0
+offset_top = 66.0
+offset_right = 30.5
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0xm2m")
+theme_override_colors/checkbox_checked_color = Color(0.95255893, 0.49497968, 0.74422747, 1)
+theme_override_colors/checkbox_unchecked_color = Color(0.6313726, 0.101960786, 0.4392157, 1)
+button_pressed = true
+text = "Autoshift sprite if asymmetric"
+
+[node name="ExportButton" type="Button" parent="CanvasLayer/Control" unique_id=1598200601]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -29.5
+offset_top = 30.0
+offset_right = 29.5
+offset_bottom = 61.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_ig7tw")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_h2yge")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0xm2m")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ig7tw")
+theme_override_styles/focus = SubResource("StyleBoxFlat_ig7tw")
+text = "Export"
+
+[connection signal="pressed" from="CanvasLayer/Control/ExportButton" to="." method="OnExportButtonPressed"]

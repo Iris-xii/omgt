@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bdyrpxaoo636i"]
+
+[ext_resource type="Shader" uid="uid://ds2w3u5apdtag" path="res://graphics_editor/glowblur_no_screen.gdshader" id="1_6asrg"]
+[ext_resource type="Texture2D" uid="uid://bah1gxi4s31l3" path="res://graphics_editor/glow_no_blur.png" id="2_jr77h"]
+
+[resource]
+shader = ExtResource("1_6asrg")
+shader_parameter/IN_TEXTURE = ExtResource("2_jr77h")
+shader_parameter/strength = 5.0
