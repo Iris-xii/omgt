@@ -27,6 +27,13 @@ public partial class GraphicsEditor : Node2D {
   EditorState editorState = EditorState.DRAW_BG;
   Vector2I drawHoverAt = Vector2I.Zero;
 
+  public Vector2 pixelHexOffset = Vector2.Zero;
+  public Action? updateHHODisplay = null;
+  public bool pixelAutoAdjust = true;
+
+  public readonly static Vector2 HEX = new(82, 96);
+  public readonly static Vector2 HALF_HEX = new(41, 48);
+
   enum EditorState {
     NONE_EXPORTING, NONE_EXPORTING_DRAW_NOTHING, NONE_EXPORTING_DRAW_STROKE, DRAW_BG
   }
@@ -34,7 +41,7 @@ public partial class GraphicsEditor : Node2D {
     editorState != EditorState.NONE_EXPORTING_DRAW_NOTHING &&
     editorState != EditorState.NONE_EXPORTING_DRAW_STROKE;
   public bool CanRenderStroke() => strokeDebug || editorState == EditorState.NONE_EXPORTING_DRAW_STROKE;//todo 
-  private bool CanRenderGlow() => editorState == EditorState.DRAW_BG;
+  private bool CanRenderHoverGlow() => editorState == EditorState.DRAW_BG;
 
   public override void _Ready() {
     hexGridMath.Visible = false;
@@ -105,10 +112,59 @@ public partial class GraphicsEditor : Node2D {
         }
       }
     }
-    if (CanRenderGlow()) {
+    if (CanRenderHoverGlow()) {
       DrawTexture(hoverGlowIcon, GridToLocal(drawHoverAt, hexGridMath) - (hoverGlowIcon.GetSize() / 2),
-      new Color(1f, 1f, 1f, 0.5f));
+        new Color(1f, 1f, 1f, 0.5f));
+      if (AllTilesRect() is Rect2 atr) {
+        DrawRect(atr, Colors.Red, false);
+        DrawRect(new Rect2(atr.GetCenter() - new Vector2(4, 4), new(8, 8)), Colors.Red, false);
+        if (!pixelHexOffset.IsZeroApprox()) {
+          var offsetRect = HexAdjustRect(atr);
+          DrawRect(offsetRect, Colors.Green, false);
+          DrawRect(new Rect2(offsetRect.GetCenter() - new Vector2(4, 4), new(8, 8)), Colors.Green, false);
+
+        }
+
+      }
     }
+  }
+
+  private readonly Vector2 ADJUST_TARGET = new Vector2(11, 54.28f).Round();
+  public void AttemptAutoAdjust() {
+    if (!pixelAutoAdjust) return;
+    if (AllTilesRect() == null) return;
+    for (int fuel = 0; fuel < 1000; fuel++) {
+      var atr = AllTilesRect();
+      if (atr == null) return;
+      var rectSoFar = HexAdjustRect((Rect2)atr!);
+      var rectSoFarCenter = rectSoFar.GetCenter().Round();
+      if (rectSoFarCenter.X > ADJUST_TARGET.X) {
+        pixelHexOffset.X -= Math.Abs(rectSoFarCenter.X - ADJUST_TARGET.X);
+        continue;
+      }
+      if (rectSoFarCenter.X < ADJUST_TARGET.X) {
+        pixelHexOffset.X += Math.Abs(rectSoFarCenter.X - ADJUST_TARGET.X);
+        continue;
+      }
+      if (rectSoFarCenter.Y > ADJUST_TARGET.Y) {
+        pixelHexOffset.Y -= Math.Abs(rectSoFarCenter.Y - ADJUST_TARGET.Y);
+        continue;
+      }
+      if (rectSoFarCenter.Y < ADJUST_TARGET.Y) {
+        pixelHexOffset.Y += Math.Abs(rectSoFarCenter.Y - ADJUST_TARGET.Y);
+        continue;
+      } 
+      break;
+    }
+    updateHHODisplay?.Invoke();
+  }
+
+  public Rect2 HexAdjustRect(Rect2 rect) {
+    float X = pixelHexOffset.X >= 0 ? rect.Position.X : rect.Position.X + pixelHexOffset.X;
+    float Y = pixelHexOffset.Y >= 0 ? rect.Position.Y : rect.Position.Y + pixelHexOffset.Y;
+    float W = rect.Size.X + Math.Abs(pixelHexOffset.X);
+    float H = rect.Size.Y + Math.Abs(pixelHexOffset.Y);
+    return new(X, Y, W, H);
   }
 
   private static Vector2I LocalToGrid(Vector2 pos, TileMapLayer hexGridMath) {
@@ -120,26 +176,26 @@ public partial class GraphicsEditor : Node2D {
     var pos = hexGridMath.Transform * posA;
     return pos;
   }
- 
-  private Rect2I AllTilesRectWithMirrored(Vector2? sizeM = null) {
+
+  private Rect2? AllTilesRect() {
     HashSet<Rect2> tilesRectWMirror = [];
-    var size = sizeM ?? new Vector2(82,96);
-    var halfSize = size/2;
+    var size = HEX;
+    var halfSize = HALF_HEX;
     foreach (var hex in hexGridMath.GetUsedCells()) {
-      tilesRectWMirror.Add(new Rect2(GetScreenTransform()*(GridToLocal(hex,hexGridMath) - halfSize),size));
-      tilesRectWMirror.Add(new Rect2(GetScreenTransform()*(GridToLocal(-hex,hexGridMath) - halfSize),size));
+      tilesRectWMirror.Add(new Rect2(GridToLocal(hex, hexGridMath) - halfSize, size));
     }
-    Rect2 finalRect = new(GetScreenTransform()*Position,Vector2.Zero);
-    foreach(var rect in tilesRectWMirror) {
-      finalRect = finalRect.Merge(rect);
-    } 
-    return (Rect2I) finalRect;
+    Rect2? finalRect = null;
+    foreach (var rect in tilesRectWMirror) {
+      finalRect ??= rect;
+      finalRect = finalRect?.Merge(rect);
+    }
+    return finalRect;
   }
 
 
   private bool pushimglock = false;
-  public async Task PushImg(bool doAutoshift) { // TODO: not swallow errors
-    if (pushimglock) { return; } 
+  public async Task PushImg() { // TODO: not swallow errors
+    if (pushimglock) { return; }
     pushimglock = true;
     var previousState = editorState;
     editorState = EditorState.NONE_EXPORTING;
@@ -149,7 +205,8 @@ public partial class GraphicsEditor : Node2D {
     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
     var imageBaseUncut = GetViewport().GetTexture().GetImage();
-    var usedRect = doAutoshift ? imageBaseUncut.GetUsedRect().Merge(AllTilesRectWithMirrored()) : imageBaseUncut.GetUsedRect();
+    //var usedRect = doAutoshift ? imageBaseUncut.GetUsedRect().Merge(AllTilesRectWithMirrored()) : imageBaseUncut.GetUsedRect();
+    var usedRect = imageBaseUncut.GetUsedRect().PixelAdjust(this);
     var imageBase = imageBaseUncut.GetRegion(usedRect);
     DirAccess.Open("user://").MakeDir("user://glyph/");
     imageBase.SavePng("user://glyph/base.png");
@@ -194,7 +251,8 @@ public partial class GraphicsEditor : Node2D {
     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 
     var imageGlowUncut = GetViewport().GetTexture().GetImage();
-    var usedRectGlow = doAutoshift ? imageGlowUncut.GetUsedRect().Merge(AllTilesRectWithMirrored(new Vector2(110,120))) : imageGlowUncut.GetUsedRect();
+    //var usedRectGlow = doAutoshift ? imageGlowUncut.GetUsedRect().Merge(AllTilesRectWithMirrored(new Vector2(110,120))) : imageGlowUncut.GetUsedRect();
+    var usedRectGlow = imageGlowUncut.GetUsedRect().PixelAdjust(this);
     var imageGlow = imageGlowUncut.GetRegion(usedRectGlow);
     //imageGlow.LinearToSrgb();
     imageGlow.SavePng("user://glyph/glow.png");
@@ -217,7 +275,8 @@ public partial class GraphicsEditor : Node2D {
     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
     var imageStrokeUncut = GetViewport().GetTexture().GetImage();
-    var usedStrokeRect = doAutoshift ? imageStrokeUncut.GetUsedRect().Merge(AllTilesRectWithMirrored(new Vector2(86,105))) : imageStrokeUncut.GetUsedRect();
+    //var usedStrokeRect = doAutoshift ? imageStrokeUncut.GetUsedRect().Merge(AllTilesRectWithMirrored(new Vector2(86,105))) : imageStrokeUncut.GetUsedRect();
+    var usedStrokeRect = imageStrokeUncut.GetUsedRect().PixelAdjust(this);
     var imageStroke = imageStrokeUncut.GetRegion(usedStrokeRect);
     imageStroke.LinearToSrgb();
     imageStroke.SavePng("user://glyph/stroke.png");
@@ -235,7 +294,7 @@ public partial class GraphicsEditor : Node2D {
     //await ToSignal(timer, SceneTreeTimer.SignalName.Timeout);
     Godot.OS.ShellShowInFileManager(ProjectSettings.GlobalizePath("user://glyph"));
     pushimglock = false;
-  } 
+  }
 
   public override void _UnhandledInput(InputEvent e) {
     switch (editorState) {
@@ -245,9 +304,11 @@ public partial class GraphicsEditor : Node2D {
           drawHoverAt = LocalToGrid(localPos, hexGridMath);
           if ((em.ButtonMask & MouseButtonMask.Left) > 0) {
             hexGridMath.SetCell(LocalToGrid(localPos, hexGridMath), 0, new Vector2I(0, 0));
+            AttemptAutoAdjust();
           }
           else if ((em.ButtonMask & MouseButtonMask.Right) > 0) {
             hexGridMath.SetCell(LocalToGrid(localPos, hexGridMath), -1);
+            AttemptAutoAdjust();
           }
           QueueRedraw();
           break;
@@ -257,5 +318,11 @@ public partial class GraphicsEditor : Node2D {
 
 
 
+}
 
+public static class GraphicsEditorExt {
+  public static Rect2I PixelAdjust(this Rect2I rect,GraphicsEditor ge) {
+    var shiftedRect = ge.HexAdjustRect(rect);
+    return (Rect2I) shiftedRect;
+  }
 }

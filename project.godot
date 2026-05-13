@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="OmGT"
+config/version="1.1.0"
 run/main_scene="uid://da36kahaqy62i"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
@@ -29,5 +30,6 @@ project/assembly_name="OmT"
 
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
+textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/use_debanding=true
 environment/defaults/default_clear_color=Color(0.17923622, 0.012920001, 0.11207495, 1)

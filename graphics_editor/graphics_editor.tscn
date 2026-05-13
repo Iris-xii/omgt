@@ -144,6 +144,7 @@ tile_set = SubResource("TileSet_fftp1")
 metadata/_edit_lock_ = true
 
 [node name="OrigMarker" type="Sprite2D" parent="." unique_id=1183859469]
+modulate = Color(1, 1, 1, 0.34500003)
 texture_filter = 1
 texture_repeat = 1
 texture = ExtResource("31_ajuis")
